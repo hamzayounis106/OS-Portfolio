@@ -5,8 +5,16 @@ import Dock from './Components/Dock/Dock';
 import Contact from './Windows/Contact';
 import Finder from './Windows/Finder';
 import Browser from './Windows/Browser';
+import TechStack from './Windows/TechStack';
 
-type WindowType = 'finder' | 'email' | 'settings' | 'user' | 'cv' | 'folder';
+type WindowType =
+  | 'finder'
+  | 'email'
+  | 'settings'
+  | 'user'
+  | 'cv'
+  | 'folder'
+  | 'techstack';
 
 interface WindowState {
   id: string;
@@ -81,6 +89,15 @@ function App() {
           case 'cv':
             return (
               <Browser
+                key={window.id}
+                onClose={() => handleWindowClose(window.id)}
+                onFocus={() => handleWindowFocus(window.id)}
+                zIndex={window.zIndex}
+              />
+            );
+          case 'techstack':
+            return (
+              <TechStack
                 key={window.id}
                 onClose={() => handleWindowClose(window.id)}
                 onFocus={() => handleWindowFocus(window.id)}
