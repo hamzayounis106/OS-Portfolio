@@ -6,6 +6,7 @@ import Contact from './Windows/Contact';
 import Finder from './Windows/Finder';
 import Browser from './Windows/Browser';
 import TechStack from './Windows/TechStack';
+import User from './Windows/User';
 
 type WindowType =
   | 'finder'
@@ -102,6 +103,16 @@ function App() {
                 onClose={() => handleWindowClose(window.id)}
                 onFocus={() => handleWindowFocus(window.id)}
                 zIndex={window.zIndex}
+              />
+            );
+          case 'user':
+            return (
+              <User
+                key={window.id}
+                onClose={() => handleWindowClose(window.id)}
+                onFocus={() => handleWindowFocus(window.id)}
+                zIndex={window.zIndex}
+                onWindowOpen={handleWindowOpen}
               />
             );
           // Add more window types here as you create them
