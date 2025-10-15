@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 interface UserProps {
   onClose: () => void;
   onFocus: () => void;
@@ -6,17 +8,31 @@ interface UserProps {
 }
 
 function User({ onClose, onFocus, zIndex, onWindowOpen }: UserProps) {
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  const toggleMaximize = () => {
+    setIsMaximized(!isMaximized);
+  };
+
   return (
     <>
       <div style={{ zIndex: zIndex - 1 }} />
 
       <div
-        className='fixed inset-0 flex items-center justify-center pointer-events-none'
+        className={`fixed inset-0 flex pointer-events-none ${
+          isMaximized
+            ? 'items-center justify-center'
+            : 'items-start justify-center pt-16'
+        }`}
         style={{ zIndex }}
         onClick={onFocus}
       >
         <div
-          className='w-[450px] bg-white rounded-[12px] shadow-2xl pointer-events-auto flex flex-col overflow-hidden border border-gray-300'
+          className={`bg-white shadow-2xl pointer-events-auto flex flex-col overflow-hidden border border-gray-300 transition-all duration-300 ${
+            isMaximized
+              ? 'w-full h-screen rounded-none'
+              : 'w-[450px] rounded-[12px]'
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Window Header */}
@@ -26,8 +42,14 @@ function User({ onClose, onFocus, zIndex, onWindowOpen }: UserProps) {
                 onClick={onClose}
                 className='w-[12px] h-[12px] rounded-full bg-[#FF5F57] hover:bg-[#FF4033] border border-[#E0443E] transition-colors'
               />
-              <button className='w-[12px] h-[12px] rounded-full bg-[#FEBC2E] hover:bg-[#FFB000] border border-[#E0A100] transition-colors' />
-              <button className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors' />
+              <button
+                onClick={toggleMaximize}
+                className='w-[12px] h-[12px] rounded-full bg-[#FEBC2E] hover:bg-[#FFB000] border border-[#E0A100] transition-colors'
+              />
+              <button
+                onClick={onClose}
+                className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors'
+              />
             </div>
             <div className='flex-1 text-center text-[13px] font-semibold text-gray-700'>
               Profile

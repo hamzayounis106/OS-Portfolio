@@ -13,6 +13,11 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
     subject: '',
     message: '',
   });
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  const toggleMaximize = () => {
+    setIsMaximized(!isMaximized);
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -35,12 +40,20 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
       <div style={{ zIndex: zIndex - 1 }} />
 
       <div
-        className='fixed inset-0 flex items-center justify-center pointer-events-none'
+        className={`fixed inset-0 flex pointer-events-none ${
+          isMaximized
+            ? 'items-center justify-center'
+            : 'items-start justify-center pt-16'
+        }`}
         style={{ zIndex }}
         onClick={onFocus}
       >
         <div
-          className='w-[700px] h-[500px] bg-white rounded-[12px] shadow-2xl pointer-events-auto flex flex-col overflow-hidden border border-gray-300'
+          className={`bg-white shadow-2xl pointer-events-auto flex flex-col overflow-hidden border border-gray-300 transition-all duration-300 ${
+            isMaximized
+              ? 'w-full h-screen rounded-none'
+              : 'w-[700px] h-[500px] rounded-[12px]'
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className='h-[52px] bg-gradient-to-b from-[#E8E8E8] to-[#D1D1D1] border-b border-gray-400 flex items-center px-4 justify-between'>
@@ -49,8 +62,14 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
                 onClick={onClose}
                 className='w-[12px] h-[12px] rounded-full bg-[#FF5F57] hover:bg-[#FF4033] border border-[#E0443E] transition-colors'
               />
-              <button className='w-[12px] h-[12px] rounded-full bg-[#FEBC2E] hover:bg-[#FFB000] border border-[#E0A100] transition-colors' />
-              <button className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors' />
+              <button
+                onClick={toggleMaximize}
+                className='w-[12px] h-[12px] rounded-full bg-[#FEBC2E] hover:bg-[#FFB000] border border-[#E0A100] transition-colors'
+              />
+              <button
+                onClick={onClose}
+                className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors'
+              />
             </div>
             <div className='flex-1 text-center text-[13px] font-semibold text-gray-700'>
               New Message

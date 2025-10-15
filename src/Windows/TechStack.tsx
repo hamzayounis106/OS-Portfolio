@@ -211,8 +211,11 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                   onClick={onClose}
                   className='w-[12px] h-[12px] rounded-full bg-[#FF5F57] hover:bg-[#FF4033] border border-[#E0443E] transition-colors'
                 />
-                <button className='w-[12px] h-[12px] rounded-full bg-[#FEBC2E] hover:bg-[#FFB000] border border-[#E0A100] transition-colors' />
-                <button className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors' />
+
+                <button
+                  onClick={onClose}
+                  className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors'
+                />
               </div>
             </div>
 

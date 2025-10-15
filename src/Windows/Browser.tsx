@@ -8,7 +8,12 @@ interface BrowserProps {
 
 function Browser({ onClose, onFocus, zIndex }: BrowserProps) {
   const [isLoading, setIsLoading] = useState(true);
+  const [isMaximized, setIsMaximized] = useState(false);
   const cvUrl = '/cv.pdf';
+
+  const toggleMaximize = () => {
+    setIsMaximized(!isMaximized);
+  };
 
   const handleIframeLoad = () => {
     setIsLoading(false);
@@ -23,12 +28,20 @@ function Browser({ onClose, onFocus, zIndex }: BrowserProps) {
       /> */}
 
       <div
-        className='fixed inset-0 flex items-center justify-center pointer-events-none'
+        className={`fixed inset-0 flex pointer-events-none ${
+          isMaximized
+            ? 'items-center justify-center'
+            : 'items-start justify-center pt-10'
+        }`}
         style={{ zIndex }}
         onClick={onFocus}
       >
         <div
-          className='w-[1000px] h-[700px] bg-[#ECECEC] rounded-[12px] shadow-2xl pointer-events-auto flex flex-col overflow-hidden border border-gray-400'
+          className={`bg-[#ECECEC] shadow-2xl pointer-events-auto flex flex-col overflow-hidden border border-gray-400 transition-all duration-300 ${
+            isMaximized
+              ? 'w-full h-screen rounded-none'
+              : 'w-[1000px] h-[600px] rounded-[12px]'
+          }`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Window Header */}
@@ -40,8 +53,14 @@ function Browser({ onClose, onFocus, zIndex }: BrowserProps) {
                   onClick={onClose}
                   className='w-[12px] h-[12px] rounded-full bg-[#FF5F57] hover:bg-[#FF4033] border border-[#E0443E] transition-colors'
                 />
-                <button className='w-[12px] h-[12px] rounded-full bg-[#FEBC2E] hover:bg-[#FFB000] border border-[#E0A100] transition-colors' />
-                <button className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors' />
+                <button
+                  onClick={toggleMaximize}
+                  className='w-[12px] h-[12px] rounded-full bg-[#FEBC2E] hover:bg-[#FFB000] border border-[#E0A100] transition-colors'
+                />
+                <button
+                  onClick={onClose}
+                  className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors'
+                />
               </div>
             </div>
 
