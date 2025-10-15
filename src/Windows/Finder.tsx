@@ -9,7 +9,7 @@ interface FinderProps {
 
 function Finder({ onClose, onFocus, zIndex }: FinderProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Projects');
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [isMaximized, setIsMaximized] = useState(false);
 
@@ -18,21 +18,37 @@ function Finder({ onClose, onFocus, zIndex }: FinderProps) {
   };
 
   // Use imported projects data
-  const categories = ['All Projects', 'MERN Stack', 'WordPress'];
+  const categories = [
+    'All',
+    'MERN',
+    'Next Js',
+    'WordPress',
+    'Shopify',
+    'Open Source GNOME',
+  ];
 
   const quickLinks = [
-    { name: 'GitHub', url: 'https://github.com/yourusername', icon: '🐙' },
-    { name: 'Fiverr', url: 'https://fiverr.com/yourusername', icon: '💼' },
+    {
+      name: 'GitHub',
+      url: 'https://github.com/hamzayounis106',
+      icon: '🐙',
+    },
+    {
+      name: 'Fiverr',
+      url: 'https://www.fiverr.com/hamzayounis_105',
+      icon: '💼',
+    },
     {
       name: 'Upwork',
-      url: 'https://upwork.com/freelancers/~yourusername',
+      url: 'https://upwork.com/freelancers/muhammadhamzay',
       icon: '💚',
     },
   ];
 
   const filteredProjects = projects.filter((project) => {
     const matchesCategory =
-      selectedCategory === 'All Projects' || project.kind === selectedCategory;
+      selectedCategory === 'All' ||
+      project.kind === selectedCategory.replace('.js', '');
     const matchesSearch = project.name
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
@@ -162,9 +178,8 @@ function Finder({ onClose, onFocus, zIndex }: FinderProps) {
             <div className='flex-1 bg-white overflow-hidden flex flex-col'>
               {/* Column Headers */}
               <div className='h-[32px] bg-gradient-to-b from-[#F7F7F7] to-[#ECECEC] border-b border-gray-300 flex items-center px-4 text-[11px] font-semibold text-gray-600'>
-                <div className='w-[50%]'>Name</div>
-                <div className='w-[25%]'>Kind</div>
-                <div className='w-[25%]'>Date Created</div>
+                <div className='w-[60%]'>Name</div>
+                <div className='w-[40%]'>Category</div>
               </div>
 
               {/* Project List */}
@@ -189,13 +204,10 @@ function Finder({ onClose, onFocus, zIndex }: FinderProps) {
                           : 'hover:bg-gray-100'
                       }`}
                     >
-                      <div className='w-[50%] text-[13px] font-medium truncate'>
+                      <div className='w-[60%] text-[13px] font-medium truncate'>
                         📄 {project.name}
                       </div>
-                      <div className='w-[25%] text-[13px]'>{project.kind}</div>
-                      <div className='w-[25%] text-[13px]'>
-                        {project.dateCreated}
-                      </div>
+                      <div className='w-[40%] text-[13px]'>{project.kind}</div>
                     </div>
                   ))
                 ) : (
@@ -205,28 +217,37 @@ function Finder({ onClose, onFocus, zIndex }: FinderProps) {
                 )}
               </div>
 
-              {/* Project Details Footer */}
+              {/* Project Details Footer with Image */}
               {selectedProject && (
-                <div className='h-[120px] border-t-2 border-gray-300 bg-[#F7F7F7] p-4 overflow-y-auto'>
+                <div className='h-[180px] border-t-2 border-gray-300 bg-[#F7F7F7] p-4 overflow-y-auto'>
                   {filteredProjects
                     .filter((p) => p.id === selectedProject)
                     .map((project) => (
-                      <div key={project.id}>
-                        <h3 className='text-[14px] font-semibold text-gray-800 mb-2'>
-                          {project.name}
-                        </h3>
-                        <p className='text-[12px] text-gray-600 mb-2'>
-                          {project.description}
-                        </p>
-                        <div className='flex gap-2 flex-wrap'>
-                          {project.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className='text-[11px] px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full'
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                      <div key={project.id} className='flex gap-4 h-full'>
+                        {/* Project Image */}
+                        <div className='w-[250px] h-full rounded-lg overflow-hidden bg-gray-200 flex-shrink-0'>
+                          <img
+                            src={project.image}
+                            alt={project.name}
+                            className='w-full h-full object-cover object-top'
+                          />
+                        </div>
+                        {/* Project Info */}
+                        <div className='flex-1 flex flex-col'>
+                          <h3 className='text-[14px] font-semibold text-gray-800 mb-2'>
+                            {project.name}
+                          </h3>
+                          <p className='text-[12px] text-gray-600 mb-2'>
+                            {project.description}
+                          </p>
+                          <a
+                            href={project.liveLink}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='text-[11px] text-blue-600 hover:underline mt-auto'
+                          >
+                            🔗 Visit Website
+                          </a>
                         </div>
                       </div>
                     ))}
