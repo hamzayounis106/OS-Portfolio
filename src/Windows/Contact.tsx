@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { sendEmail } from '../utils/mail';
 
 interface ContactProps {
   onClose: () => void;
@@ -14,6 +15,11 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
     message: '',
   });
   const [isMaximized, setIsMaximized] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [status, setStatus] = useState<{
+    type: 'success' | 'error' | null;
+    message: string;
+  }>({ type: null, message: '' });
 
   const toggleMaximize = () => {
     setIsMaximized(!isMaximized);
@@ -26,13 +32,79 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    // Clear status when user starts typing
+    if (status.type) {
+      setStatus({ type: null, message: '' });
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Message sent! (This is a demo)');
-    setFormData({ name: '', email: '', subject: '', message: '' });
+
+    console.log('📧 Contact form submission initiated');
+
+    // Validation
+    if (
+      !formData.name ||
+      !formData.email ||
+      !formData.subject ||
+      !formData.message
+    ) {
+      console.warn('⚠️ Validation failed: Missing required fields');
+      setStatus({
+        type: 'error',
+        message: 'Please fill in all fields',
+      });
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      console.warn('⚠️ Validation failed: Invalid email format');
+      setStatus({
+        type: 'error',
+        message: 'Please enter a valid email address',
+      });
+      return;
+    }
+
+    console.log('✅ Validation passed, sending email...');
+    setIsSending(true);
+    setStatus({ type: null, message: '' });
+
+    try {
+      const result = await sendEmail(formData);
+
+      if (result === true) {
+        console.log('✅ Email sent successfully!');
+        setStatus({
+          type: 'success',
+          message: "Message sent successfully! I'll get back to you soon.",
+        });
+        // Clear form after successful send
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        console.log('🧹 Form cleared');
+      } else {
+        console.error('❌ Failed to send email');
+        setStatus({
+          type: 'error',
+          message: 'Failed to send message. Please try again.',
+        });
+      }
+    } catch (error) {
+      console.error('❌ Error occurred while sending email:', error);
+      setStatus({
+        type: 'error',
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Network error. Please check your connection and try again.',
+      });
+    } finally {
+      setIsSending(false);
+      console.log('🏁 Email submission process completed');
+    }
   };
 
   return (
@@ -80,7 +152,22 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
           <div className='bg-[#F7F7F7] border-b border-gray-300'>
             <div className='flex items-center h-[28px] sm:h-[32px] px-3 sm:px-4 border-b border-gray-200'>
               <label className='w-[50px] sm:w-[60px] text-[11px] sm:text-[13px] text-gray-600 font-medium'>
-                From:
+                Name:
+              </label>
+              <input
+                type='text'
+                name='name'
+                value={formData.name}
+                onChange={handleChange}
+                placeholder='Your name'
+                className='flex-1 bg-transparent text-[11px] sm:text-[13px] outline-none text-gray-800 placeholder-gray-400'
+                required
+                disabled={isSending}
+              />
+            </div>
+            <div className='flex items-center h-[28px] sm:h-[32px] px-3 sm:px-4 border-b border-gray-200'>
+              <label className='w-[50px] sm:w-[60px] text-[11px] sm:text-[13px] text-gray-600 font-medium'>
+                Email:
               </label>
               <input
                 type='email'
@@ -90,17 +177,7 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
                 placeholder='your.email@example.com'
                 className='flex-1 bg-transparent text-[11px] sm:text-[13px] outline-none text-gray-800 placeholder-gray-400'
                 required
-              />
-            </div>
-            <div className='flex items-center h-[28px] sm:h-[32px] px-3 sm:px-4 border-b border-gray-200'>
-              <label className='w-[50px] sm:w-[60px] text-[11px] sm:text-[13px] text-gray-600 font-medium'>
-                To:
-              </label>
-              <input
-                type='text'
-                value='portfolio@yourname.com'
-                disabled
-                className='flex-1 bg-transparent text-[11px] sm:text-[13px] outline-none text-gray-500'
+                disabled={isSending}
               />
             </div>
             <div className='flex items-center h-[28px] sm:h-[32px] px-3 sm:px-4'>
@@ -115,59 +192,69 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
                 placeholder='Enter subject'
                 className='flex-1 bg-transparent text-[11px] sm:text-[13px] outline-none text-gray-800 placeholder-gray-400'
                 required
+                disabled={isSending}
               />
             </div>
           </div>
 
-          <div className='flex-1 bg-white p-3 sm:p-4'>
+          <div className='flex-1 bg-white p-3 sm:p-4 flex flex-col'>
             <textarea
               name='message'
               value={formData.message}
               onChange={handleChange}
               placeholder='Type your message here...'
-              className='w-full h-full resize-none outline-none text-[12px] sm:text-[14px] text-gray-800 placeholder-gray-400 font-[system-ui]'
+              className='flex-1 resize-none outline-none text-[12px] sm:text-[14px] text-gray-800 placeholder-gray-400 font-[system-ui]'
               required
+              disabled={isSending}
             />
+
+            {/* Status Message */}
+            {status.type && (
+              <div
+                className={`mt-2 px-3 py-2 rounded-md text-[11px] sm:text-[12px] ${
+                  status.type === 'success'
+                    ? 'bg-green-100 text-green-800 border border-green-300'
+                    : 'bg-red-100 text-red-800 border border-red-300'
+                }`}
+              >
+                {status.message}
+              </div>
+            )}
           </div>
 
-          <div className='h-[40px] sm:h-[44px] bg-gradient-to-b from-[#F7F7F7] to-[#ECECEC] border-t border-gray-300 flex items-center justify-between px-3 sm:px-4'>
-            <div className='flex items-center gap-2 sm:gap-3'>
-              <button className='text-gray-600 hover:text-gray-800 active:text-gray-900 transition-colors'>
-                <svg
-                  className='w-4 h-4 sm:w-5 sm:h-5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13'
-                  />
-                </svg>
-              </button>
-              <button className='text-gray-600 hover:text-gray-800 active:text-gray-900 transition-colors'>
-                <svg
-                  className='w-4 h-4 sm:w-5 sm:h-5'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
-                  />
-                </svg>
-              </button>
-            </div>
+          <div className='h-[40px] sm:h-[44px] bg-gradient-to-b from-[#F7F7F7] to-[#ECECEC] border-t border-gray-300 flex items-center justify-end px-3 sm:px-4'>
             <button
               onClick={handleSubmit}
-              className='px-4 sm:px-5 py-1.5 bg-[#007AFF] hover:bg-[#0051D5] active:bg-[#003DA5] text-white text-[11px] sm:text-[13px] font-medium rounded-md transition-colors shadow-sm'
+              disabled={isSending}
+              className={`px-4 sm:px-5 py-1.5 text-white text-[11px] sm:text-[13px] font-medium rounded-md transition-colors shadow-sm flex items-center gap-2 ${
+                isSending
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-[#007AFF] hover:bg-[#0051D5] active:bg-[#003DA5]'
+              }`}
             >
-              Send
+              {isSending && (
+                <svg
+                  className='animate-spin h-3 w-3 sm:h-4 sm:w-4'
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                >
+                  <circle
+                    className='opacity-25'
+                    cx='12'
+                    cy='12'
+                    r='10'
+                    stroke='currentColor'
+                    strokeWidth='4'
+                  ></circle>
+                  <path
+                    className='opacity-75'
+                    fill='currentColor'
+                    d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                  ></path>
+                </svg>
+              )}
+              {isSending ? 'Sending...' : 'Send'}
             </button>
           </div>
         </div>

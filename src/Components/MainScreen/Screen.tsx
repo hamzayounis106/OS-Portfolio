@@ -31,7 +31,7 @@ function Screen() {
     <div className='w-full h-screen'>
       <div className='absolute inset-0'>
         <img
-          src='./Wallpapers/5KRESO~2_moreDetail_x2_3840x2160.png'
+          src='./Wallpapers/bg.png'
           alt='Background'
           className='w-full h-full object-cover'
         />

@@ -31,17 +31,17 @@ function Finder({ onClose, onFocus, zIndex }: FinderProps) {
     {
       name: 'GitHub',
       url: 'https://github.com/hamzayounis106',
-      icon: '🐙',
+      icon: './Icons/Dock/github-icon.svg',
     },
     {
       name: 'Fiverr',
       url: 'https://www.fiverr.com/hamzayounis_105',
-      icon: '💼',
+      icon: './Icons/Dock/fiverr-icon.svg',
     },
     {
       name: 'Upwork',
       url: 'https://upwork.com/freelancers/muhammadhamzay',
-      icon: '💚',
+      icon: './Icons/Dock/upwork-icon.svg',
     },
   ];
 
@@ -166,7 +166,11 @@ function Finder({ onClose, onFocus, zIndex }: FinderProps) {
                       rel='noopener noreferrer'
                       className='flex items-center gap-1.5 sm:gap-2 w-full text-left px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[11px] sm:text-[13px] text-gray-700 hover:bg-gray-300 active:bg-gray-400 transition-colors'
                     >
-                      <span>{link.icon}</span>
+                      <img
+                        src={link.icon}
+                        alt={link.name}
+                        className='w-[16px] h-[16px] sm:w-[18px] sm:h-[18px] object-contain flex-shrink-0'
+                      />
                       <span className='truncate'>{link.name}</span>
                     </a>
                   ))}
