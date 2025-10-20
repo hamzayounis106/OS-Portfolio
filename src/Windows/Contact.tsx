@@ -43,7 +43,7 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
         className={`fixed inset-0 flex pointer-events-none ${
           isMaximized
             ? 'items-center justify-center'
-            : 'items-start justify-center pt-16'
+            : 'items-start justify-center pt-4 sm:pt-16'
         }`}
         style={{ zIndex }}
         onClick={onFocus}
@@ -52,34 +52,34 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
           className={`bg-white shadow-2xl pointer-events-auto flex flex-col overflow-hidden border border-gray-300 transition-all duration-300 ${
             isMaximized
               ? 'w-full h-screen rounded-none'
-              : 'w-[700px] h-[500px] rounded-[12px]'
+              : 'w-[95vw] sm:w-[700px] h-[90vh] sm:h-[500px] rounded-[12px] mx-2'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className='h-[52px] bg-gradient-to-b from-[#E8E8E8] to-[#D1D1D1] border-b border-gray-400 flex items-center px-4 justify-between'>
-            <div className='flex items-center gap-2'>
+          <div className='h-[44px] sm:h-[52px] bg-gradient-to-b from-[#E8E8E8] to-[#D1D1D1] border-b border-gray-400 flex items-center px-3 sm:px-4 justify-between'>
+            <div className='flex items-center gap-1.5 sm:gap-2'>
               <button
                 onClick={onClose}
-                className='w-[12px] h-[12px] rounded-full bg-[#FF5F57] hover:bg-[#FF4033] border border-[#E0443E] transition-colors'
+                className='w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-[#FF5F57] hover:bg-[#FF4033] active:bg-[#FF4033] border border-[#E0443E] transition-colors'
               />
               <button
                 onClick={toggleMaximize}
-                className='w-[12px] h-[12px] rounded-full bg-[#FEBC2E] hover:bg-[#FFB000] border border-[#E0A100] transition-colors'
+                className='w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-[#FEBC2E] hover:bg-[#FFB000] active:bg-[#FFB000] border border-[#E0A100] transition-colors'
               />
               <button
                 onClick={onClose}
-                className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors'
+                className='w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] active:bg-[#1FA630] border border-[#179A27] transition-colors'
               />
             </div>
-            <div className='flex-1 text-center text-[13px] font-semibold text-gray-700'>
+            <div className='flex-1 text-center text-[11px] sm:text-[13px] font-semibold text-gray-700'>
               New Message
             </div>
-            <div className='w-[60px]'></div>
+            <div className='w-[50px] sm:w-[60px]'></div>
           </div>
 
           <div className='bg-[#F7F7F7] border-b border-gray-300'>
-            <div className='flex items-center h-[32px] px-4 border-b border-gray-200'>
-              <label className='w-[60px] text-[13px] text-gray-600 font-medium'>
+            <div className='flex items-center h-[28px] sm:h-[32px] px-3 sm:px-4 border-b border-gray-200'>
+              <label className='w-[50px] sm:w-[60px] text-[11px] sm:text-[13px] text-gray-600 font-medium'>
                 From:
               </label>
               <input
@@ -88,23 +88,23 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder='your.email@example.com'
-                className='flex-1 bg-transparent text-[13px] outline-none text-gray-800 placeholder-gray-400'
+                className='flex-1 bg-transparent text-[11px] sm:text-[13px] outline-none text-gray-800 placeholder-gray-400'
                 required
               />
             </div>
-            <div className='flex items-center h-[32px] px-4 border-b border-gray-200'>
-              <label className='w-[60px] text-[13px] text-gray-600 font-medium'>
+            <div className='flex items-center h-[28px] sm:h-[32px] px-3 sm:px-4 border-b border-gray-200'>
+              <label className='w-[50px] sm:w-[60px] text-[11px] sm:text-[13px] text-gray-600 font-medium'>
                 To:
               </label>
               <input
                 type='text'
                 value='portfolio@yourname.com'
                 disabled
-                className='flex-1 bg-transparent text-[13px] outline-none text-gray-500'
+                className='flex-1 bg-transparent text-[11px] sm:text-[13px] outline-none text-gray-500'
               />
             </div>
-            <div className='flex items-center h-[32px] px-4'>
-              <label className='w-[60px] text-[13px] text-gray-600 font-medium'>
+            <div className='flex items-center h-[28px] sm:h-[32px] px-3 sm:px-4'>
+              <label className='w-[50px] sm:w-[60px] text-[11px] sm:text-[13px] text-gray-600 font-medium'>
                 Subject:
               </label>
               <input
@@ -113,28 +113,28 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
                 value={formData.subject}
                 onChange={handleChange}
                 placeholder='Enter subject'
-                className='flex-1 bg-transparent text-[13px] outline-none text-gray-800 placeholder-gray-400'
+                className='flex-1 bg-transparent text-[11px] sm:text-[13px] outline-none text-gray-800 placeholder-gray-400'
                 required
               />
             </div>
           </div>
 
-          <div className='flex-1 bg-white p-4'>
+          <div className='flex-1 bg-white p-3 sm:p-4'>
             <textarea
               name='message'
               value={formData.message}
               onChange={handleChange}
               placeholder='Type your message here...'
-              className='w-full h-full resize-none outline-none text-[14px] text-gray-800 placeholder-gray-400 font-[system-ui]'
+              className='w-full h-full resize-none outline-none text-[12px] sm:text-[14px] text-gray-800 placeholder-gray-400 font-[system-ui]'
               required
             />
           </div>
 
-          <div className='h-[44px] bg-gradient-to-b from-[#F7F7F7] to-[#ECECEC] border-t border-gray-300 flex items-center justify-between px-4'>
-            <div className='flex items-center gap-3'>
-              <button className='text-gray-600 hover:text-gray-800 transition-colors'>
+          <div className='h-[40px] sm:h-[44px] bg-gradient-to-b from-[#F7F7F7] to-[#ECECEC] border-t border-gray-300 flex items-center justify-between px-3 sm:px-4'>
+            <div className='flex items-center gap-2 sm:gap-3'>
+              <button className='text-gray-600 hover:text-gray-800 active:text-gray-900 transition-colors'>
                 <svg
-                  className='w-5 h-5'
+                  className='w-4 h-4 sm:w-5 sm:h-5'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -147,9 +147,9 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
                   />
                 </svg>
               </button>
-              <button className='text-gray-600 hover:text-gray-800 transition-colors'>
+              <button className='text-gray-600 hover:text-gray-800 active:text-gray-900 transition-colors'>
                 <svg
-                  className='w-5 h-5'
+                  className='w-4 h-4 sm:w-5 sm:h-5'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -165,7 +165,7 @@ function Contact({ onClose, onFocus, zIndex }: ContactProps) {
             </div>
             <button
               onClick={handleSubmit}
-              className='px-5 py-1.5 bg-[#007AFF] hover:bg-[#0051D5] text-white text-[13px] font-medium rounded-md transition-colors shadow-sm'
+              className='px-4 sm:px-5 py-1.5 bg-[#007AFF] hover:bg-[#0051D5] active:bg-[#003DA5] text-white text-[11px] sm:text-[13px] font-medium rounded-md transition-colors shadow-sm'
             >
               Send
             </button>

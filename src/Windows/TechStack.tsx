@@ -179,13 +179,13 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
   const getSizeClasses = (size: string) => {
     switch (size) {
       case 'small':
-        return 'w-18 h-18';
+        return 'w-14 h-14 sm:w-18 sm:h-18';
       case 'medium':
-        return 'w-28 h-28';
+        return 'w-16 h-16 sm:w-28 sm:h-28';
       case 'large':
-        return 'w-32 h-32';
+        return 'w-20 h-20 sm:w-32 sm:h-32';
       default:
-        return 'w-24 h-24';
+        return 'w-16 h-16 sm:w-24 sm:h-24';
     }
   };
 
@@ -203,38 +203,66 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
           onClick={(e) => e.stopPropagation()}
         >
           {/* Window Header */}
-          <div className='h-[52px] bg-gradient-to-b from-[#E8E8E8]/90 to-[#D1D1D1]/90 backdrop-blur-sm border-b border-gray-400/50 flex items-center px-4 justify-between'>
-            <div className='flex items-center gap-3'>
+          <div className='h-[44px] sm:h-[52px] bg-gradient-to-b from-[#E8E8E8]/90 to-[#D1D1D1]/90 backdrop-blur-sm border-b border-gray-400/50 flex items-center px-3 sm:px-4 justify-between'>
+            <div className='flex items-center gap-2 sm:gap-3'>
               {/* Traffic Light Buttons */}
-              <div className='flex items-center gap-2'>
+              <div className='flex items-center gap-1.5 sm:gap-2'>
                 <button
                   onClick={onClose}
-                  className='w-[12px] h-[12px] rounded-full bg-[#FF5F57] hover:bg-[#FF4033] border border-[#E0443E] transition-colors'
+                  className='w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-[#FF5F57] hover:bg-[#FF4033] active:bg-[#FF4033] border border-[#E0443E] transition-colors'
                 />
 
                 <button
                   onClick={onClose}
-                  className='w-[12px] h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] border border-[#179A27] transition-colors'
+                  className='w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] rounded-full bg-[#28C840] hover:bg-[#1FA630] active:bg-[#1FA630] border border-[#179A27] transition-colors'
                 />
               </div>
             </div>
 
-            <div className='flex-1 text-center text-[13px] font-semibold text-gray-700'>
+            <div className='flex-1 text-center text-[11px] sm:text-[13px] font-semibold text-gray-700'>
               Tech Stack
             </div>
-            <div className='w-[60px]'></div>
+            <div className='w-[50px] sm:w-[60px]'></div>
           </div>
 
-          {/* Main Content Area - Full Screen Grid */}
-          <div className='flex-1 flex items-center justify-center p-8 overflow-y-auto '>
-            <div className='flex flex-col items-center gap-6 mt-[300px]'>
+          {/* Main Content Area - Responsive Grid */}
+          <div className='flex-1 flex items-start sm:items-center justify-center p-4 sm:p-8 overflow-y-auto'>
+            {/* Mobile: Simple Grid Layout */}
+            <div className='sm:hidden w-full max-w-md py-4'>
+              <div className='grid grid-cols-3 gap-4 place-items-center'>
+                {techIcons.map((tech) => (
+                  <div
+                    key={tech.name}
+                    className='flex flex-col items-center justify-center gap-1.5 p-2 rounded-xl active:bg-white/70 transition-all duration-300'
+                  >
+                    <div
+                      className={`${getSizeClasses(
+                        tech.size
+                      )} flex items-center justify-center`}
+                    >
+                      <img
+                        src={tech.path}
+                        alt={tech.name}
+                        className='w-full h-full object-contain drop-shadow-lg'
+                      />
+                    </div>
+                    <span className='text-[9px] font-medium text-gray-700 transition-colors text-center leading-tight'>
+                      {tech.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Desktop: Staggered Layout */}
+            <div className='hidden sm:flex flex-col items-center gap-6 mt-[300px]'>
               {/* Row 1 - 5 items */}
               <div className='flex items-center justify-center gap-6'>
                 <div className='w-16'></div>
                 {techIcons.slice(0, 5).map((tech) => (
                   <div
                     key={tech.name}
-                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group '
+                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group'
                   >
                     <div
                       className={`${getSizeClasses(
@@ -247,7 +275,7 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                         className='w-full h-full object-contain drop-shadow-lg'
                       />
                     </div>
-                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors'>
+                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors text-center'>
                       {tech.name}
                     </span>
                   </div>
@@ -260,7 +288,7 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                 {techIcons.slice(5, 12).map((tech) => (
                   <div
                     key={tech.name}
-                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group '
+                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group'
                   >
                     <div
                       className={`${getSizeClasses(
@@ -273,7 +301,7 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                         className='w-full h-full object-contain drop-shadow-lg'
                       />
                     </div>
-                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors'>
+                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors text-center'>
                       {tech.name}
                     </span>
                   </div>
@@ -286,7 +314,7 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                 {techIcons.slice(12, 17).map((tech) => (
                   <div
                     key={tech.name}
-                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group '
+                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group'
                   >
                     <div
                       className={`${getSizeClasses(
@@ -299,7 +327,7 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                         className='w-full h-full object-contain drop-shadow-lg'
                       />
                     </div>
-                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors'>
+                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors text-center'>
                       {tech.name}
                     </span>
                   </div>
@@ -312,7 +340,7 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                 {techIcons.slice(17, 24).map((tech) => (
                   <div
                     key={tech.name}
-                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group '
+                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group'
                   >
                     <div
                       className={`${getSizeClasses(
@@ -325,7 +353,7 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                         className='w-full h-full object-contain drop-shadow-lg'
                       />
                     </div>
-                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors'>
+                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors text-center'>
                       {tech.name}
                     </span>
                   </div>
@@ -338,7 +366,7 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                 {techIcons.slice(24, 29).map((tech) => (
                   <div
                     key={tech.name}
-                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group '
+                    className='flex flex-col items-center justify-center gap-2 p-3 rounded-xl hover:bg-white/50 transition-all duration-300 group'
                   >
                     <div
                       className={`${getSizeClasses(
@@ -351,7 +379,7 @@ function TechStack({ onClose, onFocus, zIndex }: TechStackProps) {
                         className='w-full h-full object-contain drop-shadow-lg'
                       />
                     </div>
-                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors'>
+                    <span className='text-xs font-medium text-gray-700 group-hover:text-gray-900 transition-colors text-center'>
                       {tech.name}
                     </span>
                   </div>
